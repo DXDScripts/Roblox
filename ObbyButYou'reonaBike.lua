@@ -1,29 +1,20 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "🚴 Obby But You're on a Bike 🚴| DXDScripts 🚴",
+   Name = "🚴 Obby But You're on a Bike 🚴| 📜 DXDScripts 📜",
    LoadingTitle = "Obby But You're on a Bike",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
+      FolderName = nil,
       FileName = "Obby But You're on a Bike"
    },
    Discord = {
-      Enabled = false,
-      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      Enabled = true,
+      Invite = "us2eVmuTCq",
+      RememberJoins = true 
    },
-   KeySystem = false, -- Set this to true to use our key system
-   KeySettings = {
-      Title = "Key | Youtube Hub",
-      Subtitle = "Key System",
-      Note = "Key In Discord Server",
-      FileName = "YoutubeHubKey1", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-      GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-      Key = {"https://pastebin.com/raw/AtgzSPWK"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-   }
+   KeySystem = false,
 })
 
 Rayfield:Notify({
@@ -31,7 +22,7 @@ Rayfield:Notify({
    Content = "Created by DXDScripts",
    Duration = 5,
    Image = 13047715178,
-   Actions = { -- Notification Buttons
+   Actions = {
       Ignore = {
          Name = "Okay!",
          Callback = function()
@@ -41,7 +32,7 @@ Rayfield:Notify({
 },
 })
 
-local MainTab = Window:CreateTab("🏠 Home", nil) -- Title, Image
+local MainTab = Window:CreateTab("🏠 Home", nil)
 
 local MainSection = MainTab:CreateSection("SUPER OP (Timer must be above 1:00.00)")
 
@@ -130,7 +121,7 @@ local Toggle = MainTab:CreateToggle({
                 local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
-                for i = 1, 99 do  -- Adjust the loop limit to 90
+                for i = 1, 99 do
                     local checkpointName = tostring(i)
                     local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
 
@@ -162,7 +153,7 @@ local Toggle = MainTab:CreateToggle({
 				local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
-                for i = 1, 99 do  -- Adjust the loop limit to 90
+                for i = 1, 99 do
                     local checkpointName = tostring(i)
                     local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
 
@@ -277,21 +268,17 @@ local Button = MainTab:CreateButton({
     end,
 })
 
-local UserTab = Window:CreateTab("👽 User", nil) -- Title, Image
+local UserTab = Window:CreateTab("👽 User", nil)
 local Button = UserTab:CreateButton({
    Name = "Infinite Jump Toggle",
    Callback = function()
-       --Toggles the infinite jump between on or off on every script run
 _G.infinjump = not _G.infinjump
 
 if _G.infinJumpStarted == nil then
-	--Ensures this only runs once to save resources
 	_G.infinJumpStarted = true
 	
-	--Notifies readiness
 	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
 
-	--The actual infinite jump
 	local plr = game:GetService('Players').LocalPlayer
 	local m = plr:GetMouse()
 	m.KeyDown:connect(function(k)
@@ -314,7 +301,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderws", 
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -326,12 +313,12 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderjp",
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
 })
 
 
-local CreditTab = Window:CreateTab("📃 Credit", nil) -- Title, Image
+local CreditTab = Window:CreateTab("📃 Credit", nil)
 local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
