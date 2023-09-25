@@ -36,11 +36,11 @@ local MainTab = Window:CreateTab("🏠 Home", nil)
 
 local MainSection = MainTab:CreateSection("SUPER OP (Timer must be above 1:00.00)")
 
-local RemoveAds = true
+local BestTime = true
 local Button = MainTab:CreateButton({
     Name = "1:00.00 Leaderboard Timer Cheat",
     Callback = function()
-        if RemoveAds then
+        if BestTime then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.RestartPortal.Teleport.CFrame
 		
            
