@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "🚴 Obby But You're on a Bike 🚴| 📜 DXDScripts 📜",
-   LoadingTitle = "Obby But You're on a Bike",
+   Name = "🚴 Obby But You're on a Bike 🚴 | 📜 DXDScripts 📜",
+   LoadingTitle = "Obby But You're on a Bike v1.1",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
@@ -75,81 +75,14 @@ game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("
     end,
 })
 
-
-local MainSection = MainTab:CreateSection("Auto Farm")
-
-local AutoCheckpointEnabled = false
+local AutoWinResetLoopEnabled = false
 local Toggle = MainTab:CreateToggle({
-   Name = "Auto Checkpoints",
-   CurrentValue = AutoCheckpointEnabled,
+   Name = "Trophy Farm [Runs every 30 seconds]",
+   CurrentValue = AutoWinResetLoop,
    Callback = function(Value)
-   AutoCheckpointEnabled = Value
-		if AutoCheckpointEnabled then
-			while AutoCheckpointEnabled do
-				local player = game.Players.LocalPlayer
-                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
-
-                for i = 1, 99 do  
-                    local checkpointName = tostring(i)
-                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
-
-                    if checkpoint and checkpoint:IsA("Model") then
-                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
-
-                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
-                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
-
-                            wait(2)
-                        end
-                    else
-                        break
-                    end
-                end
-            end
-        end
-    end,
-})
-
-local AutoCheckpointFastEnabled = false
-local Toggle = MainTab:CreateToggle({
-    Name = "Auto Checkpoints [FAST]",
-    CurrentValue = AutoCheckpointFastEnabled,
-    Callback = function(Value)
-        AutoCheckpointFastEnabled = Value
-        if AutoCheckpointFastEnabled then
-            while AutoCheckpointFastEnabled do
-                local player = game.Players.LocalPlayer
-                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
-
-                for i = 1, 99 do
-                    local checkpointName = tostring(i)
-                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
-
-                    if checkpoint and checkpoint:IsA("Model") then
-                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
-
-                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
-                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
-
-                            wait(0.0001)
-                        end
-                    else
-                        break
-                    end
-                end
-            end
-        end
-    end,
-})
-
-local AutoCheckpointFastResetEnabled = false
-local Toggle = MainTab:CreateToggle({
-   Name = "Auto Checkpoints [FAST]+ Reset",
-   CurrentValue = AutoCheckpointFastResetEnabled,
-   Callback = function(Value)
-   AutoCheckpointFastResetEnabled = Value
-		if AutoCheckpointFastResetEnabled then
-			while AutoCheckpointFastResetEnabled do
+   AutoWinResetLoop = Value
+		if AutoWinResetLoop then
+			while AutoWinResetLoop do
 				local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
@@ -171,6 +104,101 @@ local Toggle = MainTab:CreateToggle({
                 end
 wait(1)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.RestartPortal.Teleport.CFrame
+			wait(29)
+			end
+		end
+   end,
+})
+
+
+local MainSection = MainTab:CreateSection("Auto Farm")
+
+local Button = MainTab:CreateButton({
+Name = "Auto Checkpoints",
+    Callback = function()
+				local player = game.Players.LocalPlayer
+                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
+
+                for i = 1, 99 do  
+                    local checkpointName = tostring(i)
+                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
+
+                    if checkpoint and checkpoint:IsA("Model") then
+                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
+
+                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
+                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
+
+                            wait(2)
+                        end
+                    else
+                        break
+                    end
+        end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+Name = "Auto Checkpoints [FAST]",
+    Callback = function()
+                local player = game.Players.LocalPlayer
+                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
+
+                for i = 1, 99 do
+                    local checkpointName = tostring(i)
+                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
+
+                    if checkpoint and checkpoint:IsA("Model") then
+                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
+
+                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
+                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
+
+                            wait(0.0001)
+                        end
+                    else
+                        break
+                    end
+        end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+Name = "Auto Checkpoints [FAST] + Reset",
+    Callback = function()
+				local player = game.Players.LocalPlayer
+                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
+
+                for i = 1, 99 do
+                    local checkpointName = tostring(i)
+                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
+
+                    if checkpoint and checkpoint:IsA("Model") then
+                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
+
+                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
+                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
+
+                            wait(0.0001)
+                        end
+                    else
+                        break
+                    end
+                end
+wait(1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.RestartPortal.Teleport.CFrame
+   end,
+})
+
+local AutoSpinWheelEnabled = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Spin Wheel",
+   CurrentValue = AutoSpinWheelEnabled,
+   Callback = function(Value)
+   AutoSpinWheelEnabled = Value
+		if AutoSpinWheelEnabled then
+			while AutoSpinWheelEnabled do
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer(unpack(args))
 			end
 		end
    end,
@@ -179,7 +207,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Wo
 local MainSection = MainTab:CreateSection("Remove Objects")
 
 local RemoveAll = true
-local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "Ads", "ImmersiveAds"}
+local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "Ads", "ImmersiveAds", "Knives", "Boxing Gloves", "Bouncers", "SpearTraps"}
 local Button = MainTab:CreateButton({
     Name = "Remove All",
     Callback = function()
@@ -215,12 +243,80 @@ local Button = MainTab:CreateButton({
     end,
 })
 
+local RemoveKnives = true
+local Button = MainTab:CreateButton({
+    Name = "Remove Knives",
+    Callback = function()
+        if RemoveKnives then
+            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("Knives")
+				if folderToClear then
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					else
+					warn("Folder not found")
+			end
+		end
+    end,
+})
+
+local RemoveSpears = true
+local Button = MainTab:CreateButton({
+    Name = "Remove Spear Traps",
+    Callback = function()
+        if RemoveSpears then
+            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SpearTraps")
+				if folderToClear then
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					else
+					warn("Folder not found")
+			end
+		end
+    end,
+})
+
+local RemoveBouncers = true
+local Button = MainTab:CreateButton({
+    Name = "Remove Bouncers",
+    Callback = function()
+        if RemoveBouncers then
+            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("Bouncers")
+				if folderToClear then
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					else
+					warn("Folder not found")
+			end
+		end
+    end,
+})
+
 local RemoveSwingBalls = true
 local Button = MainTab:CreateButton({
     Name = "Remove SwingBalls",
     Callback = function()
         if RemoveSwingBalls then
             local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SwingingBalls")
+				if folderToClear then
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					else
+					warn("Folder not found")
+			end
+		end
+    end,
+})
+
+local RemoveBoxingGloves = true
+local Button = MainTab:CreateButton({
+    Name = "Remove Boxing Gloves",
+    Callback = function()
+        if RemoveBoxingGloves then
+            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("BoxingGloves")
 				if folderToClear then
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
@@ -268,7 +364,88 @@ local Button = MainTab:CreateButton({
     end,
 })
 
+local TeleportTab = Window:CreateTab("💻 Teleport", nil)
+
+local MainSection = TeleportTab:CreateSection("Worlds")
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 1",
+    Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World1.Teleport.CFrame
+    end,
+})
+
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 2",
+    Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World2.Teleport.CFrame
+    end,
+})
+
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 3",
+    Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World3.Teleport.CFrame
+    end,
+})
+
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 4",
+    Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World4.Teleport.CFrame
+    end,
+})
+
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 5",
+    Callback = function()
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World5.Teleport.CFrame
+    end,
+})
+
+
 local UserTab = Window:CreateTab("👽 User", nil)
+local MainSection = UserTab:CreateSection("User Settings")
+
+local NoClipActivated = false
+local Noclip = nil
+local Clip = nil
+
+function noclip()
+    Clip = false
+    local function Nocl()
+        if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if v:IsA('BasePart') and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end
+        wait(0.21)
+    end
+    Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+end
+
+function clip()
+    if Noclip then
+        Noclip:Disconnect()
+    end
+    Clip = true
+end
+
+local Toggle = UserTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = NoClipActivated,
+    Callback = function(Value)
+        NoClipActivated = Value
+        if NoClipActivated then
+            noclip()
+        else
+            clip()
+        end
+    end,
+})
+
+
 local Button = UserTab:CreateButton({
    Name = "Infinite Jump Toggle",
    Callback = function()
@@ -276,9 +453,7 @@ _G.infinjump = not _G.infinjump
 
 if _G.infinJumpStarted == nil then
 	_G.infinJumpStarted = true
-	
 	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
-
 	local plr = game:GetService('Players').LocalPlayer
 	local m = plr:GetMouse()
 	m.KeyDown:connect(function(k)
@@ -301,7 +476,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws", 
+   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -313,10 +488,51 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp",
+   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
+})
+
+
+local MainSection = UserTab:CreateSection("User Extra's")
+local BtoolsActivate = true
+local Button = UserTab:CreateButton({
+    Name = "B-Tools",
+    Callback = function()
+        if BtoolsActivate then
+backpack = game:GetService("Players").LocalPlayer.Backpack
+hammer = Instance.new("HopperBin")
+hammer.Name = "Hammer"
+hammer.BinType = 4
+hammer.Parent = backpack
+
+cloneTool = Instance.new("HopperBin")
+cloneTool.Name = "Clone"
+cloneTool.BinType = 3
+cloneTool.Parent = backpack
+
+grabTool = Instance.new("HopperBin")
+grabTool.Name = "Grab"
+grabTool.BinType = 2
+grabTool.Parent = backpack
+		end
+    end,
+})
+
+local AntiAFKActivate = true
+local Button = UserTab:CreateButton({
+    Name = "Anti-Afk",
+    Callback = function()
+        if AntiAFKActivate then
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+		end
+    end,
 })
 
 
