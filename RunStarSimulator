@@ -9,7 +9,7 @@ local Window = Rayfield:CreateWindow({
    },
    Discord = {
       Enabled = true,
-      Invite = "noinvitelink",
+      Invite = "us2eVmuTCq",
       RememberJoins = true
    },
    KeySystem = false, 
@@ -474,57 +474,10 @@ local Toggle = PetsTab:CreateToggle({
 })
 
 
-local UserTab = Window:CreateTab("👽 User", nil) 
-local Button = UserTab:CreateButton({
-   Name = "Infinite Jump Toggle",
-   Callback = function()
-_G.infinjump = not _G.infinjump
-
-if _G.infinJumpStarted == nil then
-	_G.infinJumpStarted = true
-	
-	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
-
-	local plr = game:GetService('Players').LocalPlayer
-	local m = plr:GetMouse()
-	m.KeyDown:connect(function(k)
-		if _G.infinjump then
-			if k:byte() == 32 then
-			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-			humanoid:ChangeState('Jumping')
-			wait()
-			humanoid:ChangeState('Seated')
-			end
-		end
-	end)
-end
-   end,
-})
-
-local Slider = UserTab:CreateSlider({
-   Name = "WalkSpeed Slider",
-   Range = {16, 350},
-   Increment = 1,
-   Suffix = "Speed",
-   CurrentValue = 16,
-   Flag = "sliderws", 
-   Callback = function(Value)
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
-   end,
-})
-
-local Slider = UserTab:CreateSlider({
-   Name = "JumpPower Slider",
-   Range = {16, 350},
-   Increment = 1,
-   Suffix = "Speed",
-   CurrentValue = 16,
-   Flag = "sliderjp",
-   Callback = function(Value)
-        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
-   end,
-})
-
+Added new items:
+No-Clip
+Anti-AFK
+B-Tools
 
 local CreditTab = Window:CreateTab("📃 Credit", nil)
 local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
