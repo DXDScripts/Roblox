@@ -6,8 +6,6 @@ local Window = Rayfield:CreateWindow({
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil,
-      FileName = "Obby But You're on a Bike"
    },
    Discord = {
       Enabled = true,
@@ -540,7 +538,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderws",
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -552,7 +550,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderjp",
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
