@@ -1,7 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "💩 Obby But you're a poop 💩 | DXDScripts 💩",
+   Name = "💩 Obby But you're a poop 💩 | 📜 DXDScripts 📜",
    LoadingTitle = "Obby But you're a poop",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
