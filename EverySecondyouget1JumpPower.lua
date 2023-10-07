@@ -8,7 +8,7 @@ local Window = Rayfield:CreateWindow({
       Enabled = false,
    },
    Discord = {
-      Enabled = false,
+      Enabled = true,
       Invite = "us2eVmuTCq",
       RememberJoins = true 
    },
@@ -20,7 +20,7 @@ Rayfield:Notify({
    Content = "Created by DXDScripts",
    Duration = 5,
    Image = 13047715178,
-   Actions = { -- Notification Buttons
+   Actions = { 
       Ignore = {
          Name = "Okay!",
          Callback = function()
@@ -30,7 +30,7 @@ Rayfield:Notify({
 },
 })
 
-local MainTab = Window:CreateTab("🏠 Home", nil) -- Title, Image
+local MainTab = Window:CreateTab("🏠 Home", nil)
 local MainSection = MainTab:CreateSection("Auto Farm")
 
 local AutoWinsEnabled = false
@@ -109,7 +109,7 @@ local Button = MainTab:CreateButton({
     end,
 })
 
-local PetsTab = Window:CreateTab("🥚 Pets", nil) -- Title, Image
+local PetsTab = Window:CreateTab("🥚 Pets", nil)
 
 local CraftAllPets = true
 local Button = PetsTab:CreateButton({
@@ -200,7 +200,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderws",
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -212,7 +212,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderjp",
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
@@ -260,5 +260,5 @@ end)
 })
 
 
-local CreditTab = Window:CreateTab("📃 Credit", nil) -- Title, Image
+local CreditTab = Window:CreateTab("📃 Credit", nil)
 local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
