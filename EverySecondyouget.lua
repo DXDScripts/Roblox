@@ -406,5 +406,5 @@ end)
 })
 
 
-local CreditTab = Window:CreateTab("📃 Credit", nil) -- Title, Image
+local CreditTab = Window:CreateTab("📃 Credit", nil)
 local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
