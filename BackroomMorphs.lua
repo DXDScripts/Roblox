@@ -9,7 +9,7 @@ local Window = Rayfield:CreateWindow({
    },
    Discord = {
       Enabled = true,
-      Invite = "noinvitelink",
+      Invite = "us2eVmuTCqk",
       RememberJoins = true
    },
    KeySystem = false,
@@ -89,7 +89,7 @@ local function teleportToMeshPart(meshPart)
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     
 
-    humanoidRootPart.CFrame = CFrame.new(meshPart.Position + Vector3.new(0, 5, 0)) -- Adjust the height offset as needed
+    humanoidRootPart.CFrame = CFrame.new(meshPart.Position + Vector3.new(0, 5, 0))
 end
 
  
