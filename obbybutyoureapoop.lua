@@ -9,10 +9,10 @@ local Window = Rayfield:CreateWindow({
    },
    Discord = {
       Enabled = true,
-      Invite = "us2eVmuTCq", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+      Invite = "us2eVmuTCq", 
+      RememberJoins = true 
    },
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = false, 
 })
 
 Rayfield:Notify({
@@ -20,7 +20,7 @@ Rayfield:Notify({
    Content = "Created by DXDScripts",
    Duration = 5,
    Image = 13047715178,
-   Actions = { -- Notification Buttons
+   Actions = { 
       Ignore = {
          Name = "Okay!",
          Callback = function()
@@ -73,7 +73,7 @@ local Toggle = MainTab:CreateToggle({
         end
 
         if AutoCheckpointEnabled then
-            for i = 1, 150 do -- Adjust the range as needed
+            for i = 1, 150 do
                 local checkpointName = tostring(i)
                 teleportToCheckpoint(checkpointName)
             end
@@ -102,7 +102,7 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-            for i = 1, 150 do -- Adjust the range as needed
+            for i = 1, 150 do 
                 local checkpointName = tostring(i)
                 teleportToCheckpoint(checkpointName)
         end
@@ -130,7 +130,7 @@ local Toggle = MainTab:CreateToggle({
             end
         end
 
-            for i = 1, 150 do -- Adjust the range as needed
+            for i = 1, 150 do
                 local checkpointName = tostring(i)
                 teleportToCheckpoint(checkpointName)
         end
@@ -287,7 +287,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderws", 
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -299,7 +299,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Flag = "sliderjp", 
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
@@ -347,5 +347,5 @@ end)
 })
 
 
-local CreditTab = Window:CreateTab("📃 Credit", nil) -- Title, Image
+local CreditTab = Window:CreateTab("📃 Credit", nil) 
 local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
