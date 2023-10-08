@@ -277,8 +277,8 @@ local function AutoCraftFunction(Value)
 		wait(1)
             for i = 1, 100 do
                 local args = {
-                    [1] = tostring(i) -- Convert the value of 'i' to a string
-                }
+                    [1] = tostring(i) 
+					
                 CraftingEventS:FireServer(unpack(args))
             end
         end
@@ -336,7 +336,6 @@ local Button = MainTab:CreateButton({
         local player = game:GetService("Players").LocalPlayer
         print("Finding best trail for player:", player.Name)
         
-        -- Find the highest value trail
         local trailFolder = player:FindFirstChild("OwnedTrails")
         local highestTrail = nil
         local highestSpeed = 0
@@ -353,17 +352,15 @@ local Button = MainTab:CreateButton({
 				end
         end
 
-        -- Equip the trail with the highest speed
         if highestTrail then
             local trailName = highestTrail.Name
             print("Equipping trail:", trailName)
             
             local trailEvent = game:GetService("ReplicatedStorage").GameClient.Events.RemoteEvent.TrailEventStatus
             
-            -- Create the argument table
             local args = {
-                [1] = "Equip",  -- Action: Equip
-                [2] = trailName -- Trail name
+                [1] = "Equip", 
+                [2] = trailName
             }
 
             trailEvent:FireServer(unpack(args))
@@ -373,9 +370,6 @@ local Button = MainTab:CreateButton({
         end
     end,
 })
-
-
-
 
 
 local MainSection = MainTab:CreateSection("Extra's")
