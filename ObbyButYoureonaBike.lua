@@ -2,10 +2,12 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "🚴 Obby But You're on a Bike 🚴 | 📜 DXDScripts 📜",
-   LoadingTitle = "Obby But You're on a Bike v1.1",
+   LoadingTitle = "Obby But You're on a Bike v1.1.1",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
+      FolderName = nil,
+      FileName = "Obby But You're on a Bike"
    },
    Discord = {
       Enabled = true,
@@ -237,17 +239,19 @@ local Toggle = MainTab:CreateToggle({
 		if AutoSpinWheelEnabled then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing All Objects"; Duration=5;})
 			while AutoSpinWheelEnabled do
-			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer(unpack(args))
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer()
 			end
 		end
    end,
 })
 
-local MainSection = MainTab:CreateSection("Remove Objects")
+local RemoveTab = Window:CreateTab("❌ Remove", nil)
+local MainSection = RemoveTab:CreateSection("Remove Options")
+
 
 local RemoveAll = true
-local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "Ads", "ImmersiveAds", "Knives", "Boxing Gloves", "Bouncers", "SpearTraps"}
-local Button = MainTab:CreateButton({
+local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "SpinningHammers", "Ads", "ImmersiveAds", "Knives", "Boxing Gloves", "Bouncers", "SpearTraps"}
+local Button = RemoveTab:CreateButton({
     Name = "Remove All",
     Callback = function()
 	if RemoveAll then
@@ -268,7 +272,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveKillBricks = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove KillBricks",
     Callback = function()
         if RemoveKillBricks then
@@ -287,7 +291,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveKnives = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Knives",
     Callback = function()
         if RemoveKnives then
@@ -306,7 +310,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveSpears = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Spear Traps",
     Callback = function()
         if RemoveSpears then
@@ -325,7 +329,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveBouncers = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Bouncers",
     Callback = function()
         if RemoveBouncers then
@@ -344,7 +348,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveSwingBalls = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove SwingBalls",
     Callback = function()
         if RemoveSwingBalls then
@@ -363,7 +367,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveBoxingGloves = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Boxing Gloves",
     Callback = function()
         if RemoveBoxingGloves then
@@ -382,7 +386,7 @@ local Button = MainTab:CreateButton({
 })
 
 local RemoveSpinningBars = true
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Spinning Bars",
     Callback = function()
         if RemoveSpinningBars then
@@ -399,13 +403,31 @@ local Button = MainTab:CreateButton({
 		end
     end,
 })
-local RemoveAds = true
+
+local RemoveSpinningHammers = true
+local Button = RemoveTab:CreateButton({
+    Name = "Remove Spinning Hammers",
+    Callback = function()
+        if RemoveSpinningHammers then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Spinning Hammers"; Duration=5;})
+            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SpinningHammers")
+				if folderToClear then
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					else
+					warn("Folder not found")
+			end
+			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Spinning Hammers Removed"; Duration=5;})
+		end
+    end,
+})
+
 local FoldersToRemoveAds = {"Ads", "ImmersiveAds"}
-local Button = MainTab:CreateButton({
+local Button = RemoveTab:CreateButton({
     Name = "Remove Ads",
     Callback = function()
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Ads"; Duration=5;})
-	if RemoveAds then
         for _, folderName in ipairs(FoldersToRemoveAds) do
             local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild(folderName)
             if folderToClear then
@@ -417,7 +439,6 @@ local Button = MainTab:CreateButton({
 				end
 			end
 			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Ads Removed"; Duration=5;})
-		end
     end,
 })
 
@@ -427,7 +448,7 @@ local MainSection = TeleportTab:CreateSection("Worlds")
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 1",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 1"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporating  to WORLD 1"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World1.Teleport.CFrame
     end,
 })
@@ -463,6 +484,15 @@ local Button = TeleportTab:CreateButton({
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World5.Teleport.CFrame
     end,
 })
+
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 6",
+    Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 6"; Duration=5;})
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World6.Teleport.CFrame
+    end,
+})
+
 
 
 local UserTab = Window:CreateTab("👽 User", nil)
@@ -538,7 +568,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderws",
+   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
    end,
@@ -550,7 +580,7 @@ local Slider = UserTab:CreateSlider({
    Increment = 1,
    Suffix = "Speed",
    CurrentValue = 16,
-   Flag = "sliderjp",
+   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
    Callback = function(Value)
         game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
    end,
@@ -596,7 +626,3 @@ end)
 		end
     end,
 })
-
-
-local CreditTab = Window:CreateTab("📃 Credit", nil)
-local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
