@@ -2,7 +2,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "🚴 Obby But You're on a Bike 🚴 | 📜 DXDScripts 📜",
-   LoadingTitle = "Obby But You're on a Bike v1.1.1",
+   LoadingTitle = "Obby But You're on a Bike v1.2",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
@@ -34,7 +34,7 @@ Rayfield:Notify({
 
 local MainTab = Window:CreateTab("🏠 Home", nil)
 
-local MainSection = MainTab:CreateSection("SUPER OP (Timer must be above 1:00.00)")
+local MainSection = MainTab:CreateSection("SUPER OP (Timer must be above time specified")
 
 local BestTime = true
 local Button = MainTab:CreateButton({
@@ -74,7 +74,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("
 			end
     end,
 })
-local MainSection = MainTab:CreateSection("SUPER OP (Timer must be above 30:00)")
+
 local BestTime = true
 local Button = MainTab:CreateButton({
     Name = "30:00 Leaderboard Timer Cheat [NON-BIKE]",
@@ -114,10 +114,11 @@ game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("
     end,
 })
 
-local MainSection = MainTab:CreateSection("WORLD 4 is best for 2 Trophies per Win")
+local MainSection = MainTab:CreateSection("Auto Farm")
+
 local AutoWinResetLoopEnabled = false
 local Toggle = MainTab:CreateToggle({
-   Name = "Trophy Farm [Runs every 30 seconds]",
+   Name = "Trophy Farm [Runs every 30 seconds - World 4 Best]",
    CurrentValue = AutoWinResetLoop,
    Callback = function(Value)
    AutoWinResetLoop = Value
@@ -150,12 +151,150 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Wo
    end,
 })
 
+local MainSection = MainTab:CreateSection("Auto Extra's")
+local AutoSpinWheelEnabled = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Spin Wheel",
+   CurrentValue = AutoSpinWheelEnabled,
+   Callback = function(Value)
+   AutoSpinWheelEnabled = Value
+		if AutoSpinWheelEnabled then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Spin Wheel Enabled"; Duration=5;})
+			while AutoSpinWheelEnabled do
+			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer()
+			end
+		end
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Spin Wheel Disabled"; Duration=5;})
+   end,
+})
 
-local MainSection = MainTab:CreateSection("Auto Farm")
+local AutoBuyBikesEnabled = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Buy all Bikes [Trophy Bikes Only]",
+   CurrentValue = AutoBuyBikesEnabled,
+   Callback = function(Value)
+   AutoBuyBikesEnabled = Value
+		if AutoBuyBikesEnabled then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Buying all Bikes"; Duration=5;})
+			while AutoBuyBikesEnabled do
+			local numbers = {4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}
+
+local remoteEvent = game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("BuyBikeWithTrophies")
+
+for i, numberloop in ipairs(numbers) do
+    local args = {
+        [1] = numberloop
+    }
+    
+    remoteEvent:FireServer(unpack(args))
+    wait(1) -- 
+end
+
+			end
+		end
+   end,
+})
+
+local MainSection = MainTab:CreateSection("Reset Options")
+local Button = MainTab:CreateButton({
+Name = "Reset Stage and Timer",
+    Callback = function()
+				game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ReportReset"):FireServer()
+    end,
+})
 
 local Button = MainTab:CreateButton({
-Name = "Auto Checkpoints",
+Name = "Reset Character",
     Callback = function()
+		game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ReportDeath"):FireServer()
+    end,
+})
+
+local CheckPointTab = Window:CreateTab("🚩 Checks", nil)
+local MainSection = CheckPointTab:CreateSection("CheckPoint Options")
+
+local Button = CheckPointTab:CreateButton({
+Name = "Skip Current Stage",
+    Callback = function()
+				-- Get player and stage value
+local player = game.Players.LocalPlayer
+local stage = player.leaderstats and player.leaderstats.Stage
+
+-- Function to teleport to the next checkpoint HitBox
+local function teleportToNextCheckpoint()
+    if stage and stage.Value then
+        local checkpointNumber = tonumber(stage.Value) + 1
+        local checkpoint = workspace.WorldMap.Checkpoints:FindFirstChild(tostring(checkpointNumber))
+        
+        if checkpoint then
+            local hitbox = checkpoint:FindFirstChild("Hitbox")
+            if hitbox then
+                player.Character:SetPrimaryPartCFrame(hitbox.CFrame)
+            end
+        end
+    end
+end
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "DXDSCRIPTS",
+    Text = "Teleporting to the next Stage",
+    Duration = 5
+})
+
+teleportToNextCheckpoint()
+
+game.StarterGui:SetCore("SendNotification", {
+    Title = "DXDSCRIPTS",
+    Text = "Teleported to the next Stage",
+    Duration = 5
+})
+    end,
+})
+
+local player = game.Players.LocalPlayer
+local checkpoints = game.Workspace.WorldMap:FindFirstChild("Checkpoints")
+
+local function teleportToCheckpoint(stageNumber)
+    local checkpoint = checkpoints and checkpoints:FindFirstChild(tostring(stageNumber))
+    if checkpoint then
+        local hitbox = checkpoint:FindFirstChild("Hitbox")
+        if hitbox then
+            player.Character:SetPrimaryPartCFrame(hitbox.CFrame)
+        end
+    end
+end
+
+local Input = CheckPointTab:CreateInput({
+   Name = "Stage Picker",
+   PlaceholderText = "TypeStageHere",
+   RemoveTextAfterFocusLost = false,
+   Callback = function(Text)
+       local stageNumber = tonumber(Text)
+	   game.StarterGui:SetCore("SendNotification", {
+    Title = "DXDSCRIPTS",
+    Text = "Teleporting to Stage " .. stageNumber,
+    Duration = 5
+})
+       if stageNumber then
+           teleportToCheckpoint(stageNumber)
+		   game.StarterGui:SetCore("SendNotification", {
+    Title = "DXDSCRIPTS",
+    Text = "Teleported to Stage " .. stageNumber,
+    Duration = 5
+})
+       else
+           warn("Invalid stage number entered.")
+       end
+   end,
+})
+
+
+local MainSection = CheckPointTab:CreateSection("Auto CheckPoint Options")
+
+local Button = CheckPointTab:CreateButton({
+Name = "Auto Checkpoints [SLOW]",
+    Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto CheckPoint[SLOW] Started"; Duration=5;})
 				local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
@@ -169,18 +308,20 @@ Name = "Auto Checkpoints",
                         if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
                             player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
 
-                            wait(2)
+                            wait(1)
                         end
                     else
                         break
                     end
         end
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto CheckPoint[SLOW] Finished"; Duration=5;})
     end,
 })
 
-local Button = MainTab:CreateButton({
+local Button = CheckPointTab:CreateButton({
 Name = "Auto Checkpoints [FAST]",
     Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto CheckPoint[FAST] Started"; Duration=5;})
                 local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
@@ -200,12 +341,14 @@ Name = "Auto Checkpoints [FAST]",
                         break
                     end
         end
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Checkpoint[FAST] Finished"; Duration=5;})
     end,
 })
 
-local Button = MainTab:CreateButton({
+local Button = CheckPointTab:CreateButton({
 Name = "Auto Checkpoints [FAST] + Reset",
     Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto CheckPoint+Reset Started"; Duration=5;})
 				local player = game.Players.LocalPlayer
                 local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
 
@@ -227,25 +370,45 @@ Name = "Auto Checkpoints [FAST] + Reset",
                 end
 wait(1)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.RestartPortal.Teleport.CFrame
-   end,
-})
-
-local AutoSpinWheelEnabled = false
-local Toggle = MainTab:CreateToggle({
-   Name = "Auto Spin Wheel",
-   CurrentValue = AutoSpinWheelEnabled,
-   Callback = function(Value)
-   AutoSpinWheelEnabled = Value
-		if AutoSpinWheelEnabled then
-		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing All Objects"; Duration=5;})
-			while AutoSpinWheelEnabled do
-			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer()
-			end
-		end
+game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Checkpoint+Reset Finished"; Duration=5;})
    end,
 })
 
 local RemoveTab = Window:CreateTab("❌ Remove", nil)
+
+local MainSection = RemoveTab:CreateSection("STOP Options")
+
+local function deleteFallingPartHitbox(part)
+    local hitbox = part:FindFirstChild("FallingPartHitbox")
+    if hitbox then
+        hitbox:Destroy()
+    end
+end
+
+local function deleteHitboxesInFallingParts()
+    local fallingParts = workspace.WorldMap:FindFirstChild("FallingParts")
+    if fallingParts then
+        for _, part in pairs(fallingParts:GetChildren()) do
+            deleteFallingPartHitbox(part)
+        end
+    else
+        warn("FallingParts folder not found in WorldMap.")
+    end
+end
+
+local StopFallingParts = true
+local Button = RemoveTab:CreateButton({
+    Name = "STOP Falling Parts",
+    Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Stopping Falling Parts"; Duration=5;})
+        if StopFallingParts then
+			deleteHitboxesInFallingParts()
+			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Falling Parts Stopped"; Duration=5;})
+		end
+    end,
+})
+
+
 local MainSection = RemoveTab:CreateSection("Remove Options")
 
 
@@ -442,7 +605,7 @@ local Button = RemoveTab:CreateButton({
     end,
 })
 
-local TeleportTab = Window:CreateTab("💻 Teleport", nil)
+local TeleportTab = Window:CreateTab("💻 Tele", nil)
 
 local MainSection = TeleportTab:CreateSection("Worlds")
 local Button = TeleportTab:CreateButton({
