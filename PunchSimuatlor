@@ -1,0 +1,532 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "👊 Punch Simulator 👊 | 📜 DXDScripts 📜 ",
+   LoadingTitle = "Punch Simulator",
+   LoadingSubtitle = "Script created by DXDScripts",
+   ConfigurationSaving = {
+      Enabled = false,
+
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", 
+      RememberJoins = true 
+   },
+   KeySystem = false,
+})
+
+Rayfield:Notify({
+   Title = "Punch Simulator",
+   Content = "Created by DXDScripts",
+   Duration = 5,
+   Image = 13047715178,
+   Actions = {
+      Ignore = {
+         Name = "Okay!",
+         Callback = function()
+         print("The user tapped Okay!")
+      end
+   },
+},
+})
+
+local MainTab = Window:CreateTab("🏠 Home", nil)
+local MainSection = MainTab:CreateSection("Auto Farm")
+
+local AutoPunchEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Punch",
+    CurrentValue = AutoPunchEnabled,
+    Callback = function(Value)
+        AutoPunchEnabled = Value
+        if AutoPunchEnabled then
+            while AutoPunchEnabled do
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("DamageIncreaseOnClickEvent"):FireServer()
+    wait(0.0001)
+			end
+		end
+	end,
+})
+
+local AutoWinEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Win",
+    CurrentValue = AutoWinEnabled,
+    Callback = function(Value)
+        AutoWinEnabled = Value
+        if AutoWinEnabled then
+            while AutoWinEnabled do
+        local args = {
+    [1] = true
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PushEvent"):FireServer(unpack(args))
+
+    wait(0.0001)
+			end
+		end
+	end,
+})
+
+
+local AutoAscenddEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Ascend",
+    CurrentValue = AutoAscenddEnabled,
+    Callback = function(Value)
+        AutoAscenddEnabled = Value
+        if AutoAscenddEnabled then
+            while AutoAscenddEnabled do
+        local args = {
+    [1] = true
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("AscendEvent"):FireServer(unpack(args))
+
+    wait(0.0001)
+			end
+		end
+	end,
+})
+
+local MainSection = MainTab:CreateSection("Auto Extra's")
+
+local AutoClaimGiftEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Claim Daily Gifts",
+    CurrentValue = AutoClaimGiftEnabled,
+    Callback = function(Value)
+        AutoClaimGiftEnabled = Value
+        if AutoClaimGiftEnabled then
+            while AutoClaimGiftEnabled do
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local PlaytimeRewardUpdateEvent = ReplicatedStorage:WaitForChild("Events"):WaitForChild("PlaytimeRewardUpdateEvent")
+
+for i = 1, 12 do
+    local args = {
+        [1] = i
+    }
+    PlaytimeRewardUpdateEvent:FireServer(unpack(args))
+    wait(1)
+end
+
+			end
+		end
+	end,
+})
+
+local AutoQuestAwardEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Quest Rewards",
+    CurrentValue = AutoQuestAwardEnabled,
+    Callback = function(Value)
+        AutoQuestAwardEnabled = Value
+        if AutoQuestAwardEnabled then
+            while AutoQuestAwardEnabled do
+        local args = {
+    [1] = "Claim"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("QuestEvent"):InvokeServer(unpack(args))
+
+    wait(1)
+			end
+		end
+	end,
+})
+
+
+local AutoSpinEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Spin Wheel",
+    CurrentValue = AutoSpinEnabled,
+    Callback = function(Value)
+        AutoSpinEnabled = Value
+        if AutoSpinEnabled then
+            while AutoSpinEnabled do
+        local args = {
+    [1] = "Spin"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SpinWheelEvent"):FireServer(unpack(args))
+
+    wait(1)
+			end
+		end
+	end,
+})
+
+local MainSection = MainTab:CreateSection("Extra's")
+
+
+-- Define the button and function to teleport to the next chest
+local currentChestIndex = 1  -- Initialize the index
+local Toggle = MainTab:CreateButton({
+    Name = "Teleport to Next Chest",
+    Callback = function()
+        TeleportToNextChest(currentChestIndex)
+    end,
+})
+
+-- Function to teleport to the next chest
+function TeleportToNextChest(currentIndex)
+    local hiddenChests = game:GetService("Workspace").HiddenChests:GetChildren()
+
+    if #hiddenChests == 0 then
+        warn("No hidden chests found in HiddenChests folder.")
+        return
+    end
+
+    -- Ensure currentIndex is within bounds
+    currentChestIndex = (currentChestIndex % #hiddenChests) + 1
+
+    local targetChest = hiddenChests[currentChestIndex]
+
+    if targetChest then
+        local chestCFrame = targetChest:FindFirstChild("Meshes"):FindFirstChild("CamronTreasure_Cube.001 (2)"):FindFirstChild("CFrame")
+        if chestCFrame then
+            -- Teleport the player to the chest's position
+            game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(chestCFrame.Value)
+        end
+    end
+end
+
+
+
+local Toggle = MainTab:CreateButton({
+   Name = "Claim Daily Reward",
+   Callback = function()
+			game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("ClaimDailyReward"):FireServer()
+   end,
+})
+
+local BossesTab = Window:CreateTab("🤖 Bosses", nil)
+local function FetchBossesLocation(stageName)
+    local StageNumber = workspace.BreakableParts:FindFirstChild(stageName)
+    local itemNames = {}
+    if StageNumber then
+        for _, item in pairs(StageNumber:GetChildren()) do
+            if item:IsA("Model") then
+                table.insert(itemNames, item.Name)
+            end
+        end
+    else
+        warn(stageName .. " not found in BreakableParts.")
+    end
+    
+    return itemNames
+end
+
+local function SetupStage(stageName, tab)
+    local MainSection = tab:CreateSection(stageName)
+
+    local selectedOption = FetchBossesLocation(stageName)[1]
+
+    local Dropdown = tab:CreateDropdown({
+        Name = stageName .. ": Boss List",
+        Options = FetchBossesLocation(stageName),
+        CurrentOption = selectedOption,
+        MultipleOptions = false,
+        Callback = function(Option)
+            selectedOption = Option[1]
+        end,
+    })
+
+    local AutoAutoWinEnabled = false
+    local Toggle = tab:CreateToggle({
+        Name = "[" .. stageName .. "] Auto Win",
+        CurrentValue = AutoAutoWinEnabled,
+        Callback = function(Value)
+            AutoAutoWinEnabled = Value
+            if AutoAutoWinEnabled then
+                while AutoAutoWinEnabled do
+                    local selectedOptionName = selectedOption
+                    local player = game:GetService("Players").LocalPlayer
+                    local StageLocation = game:GetService("Workspace").BreakableParts:FindFirstChild(stageName)
+                    local bossLocation = StageLocation:FindFirstChild(selectedOptionName)
+                    if bossLocation then
+                        player.Character.HumanoidRootPart.CFrame = bossLocation.HumanoidRootPart.CFrame
+                        wait(0.5)
+                        local proximityPrompt = bossLocation.HumanoidRootPart.ProximityPrompt
+                        fireproximityprompt(proximityPrompt, player, true)
+                        wait(0.5)
+                        local args = {
+                            [1] = true
+                        }
+                        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PushEvent"):FireServer(unpack(args))
+                        wait(3)
+                    else
+                        warn("Selected boss location not found.")
+                        AutoAutoWinEnabled = false
+                    end
+                end
+            end
+        end,
+    })
+end
+
+SetupStage("Stage1", BossesTab)
+SetupStage("Stage2", BossesTab)
+SetupStage("Stage3", BossesTab)
+SetupStage("Stage4", BossesTab)
+SetupStage("Stage5", BossesTab)
+SetupStage("Stage6", BossesTab)
+SetupStage("Stage7", BossesTab)
+SetupStage("Stage8", BossesTab)
+SetupStage("Stage9", BossesTab)
+SetupStage("Stage10", BossesTab)
+SetupStage("Stage11", BossesTab)
+SetupStage("Stage12", BossesTab)
+SetupStage("Stage13", BossesTab)
+SetupStage("Stage14", BossesTab)
+SetupStage("Stage15", BossesTab)
+
+local TeleportTab = Window:CreateTab("💻 Tele", nil)
+
+local Toggle = TeleportTab:CreateButton({
+   Name = "World 1",
+   Callback = function()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").World.W1.CFrame
+   end,
+})
+
+local Toggle = TeleportTab:CreateButton({
+   Name = "World 2",
+   Callback = function()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").World.W2.CFrame
+   end,
+})
+
+local Toggle = TeleportTab:CreateButton({
+   Name = "World 3",
+   Callback = function()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").World.W3.CFrame
+   end,
+})
+
+local Toggle = TeleportTab:CreateButton({
+   Name = "World 4",
+   Callback = function()
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").World.W4.CFrame
+   end,
+})
+
+local EggsTab = Window:CreateTab("🥚 Eggs", nil)
+local MainSection = EggsTab:CreateSection("Pets")
+
+local Toggle = EggsTab:CreateButton({
+   Name = "Equip Best Pets",
+   Callback = function()
+			game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("EquipBest"):InvokeServer()
+   end,
+})
+
+local MainSection = EggsTab:CreateSection("Auto Buy Eggs")
+
+local function FetchEggNamesAndNumbers()
+    local eggData = {}
+    for _, eggVendor in pairs(game:GetService("Workspace").EggVendors:GetChildren()) do
+        local petsPopup = eggVendor:FindFirstChild("PetsPopup")
+        if petsPopup then
+            local textLabel = petsPopup:FindFirstChild("FloatingText"):FindFirstChild("BillboardGui"):FindFirstChild("TextLabel")
+            if textLabel then
+                local eggName = textLabel.Text
+                local eggNumber = eggVendor.Name -- Assuming the number is the name of the model
+                print("Found Egg:", eggName, "Number:", eggNumber) -- Debugging line
+                table.insert(eggData, {
+                    Name = eggName,
+                    Number = eggNumber
+                })
+            end
+        end
+    end
+    return eggData
+end
+
+local eggData = FetchEggNamesAndNumbers()
+local selectedEggNumber = eggData[1].Number
+local selectedOption = eggData[1].Name
+
+local eggOptions = {} -- Extract egg names from the eggData
+for _, data in pairs(eggData) do
+    table.insert(eggOptions, data.Name)
+end
+
+local Dropdown = EggsTab:CreateDropdown({
+    Name = "Egg Selection",
+    Options = eggOptions,
+    CurrentOption = selectedOption,
+    MultipleOptions = false,
+    Callback = function(Option)
+        selectedOption = Option[1]
+        for _, data in pairs(eggData) do
+            if data.Name == selectedOption then
+                selectedEggNumber = data.Number
+                print("Selected Egg:", selectedOption, "Number:", selectedEggNumber) -- Debugging line
+                break
+            end
+        end
+    end,
+})
+
+local AutoBuy1EggEnabled = false
+local Toggle = EggsTab:CreateToggle({
+    Name = "Auto Buy Egg [SINGLE HATCH]",
+    CurrentValue = AutoBuy1EggEnabled,
+    Callback = function(Value)
+        AutoBuy1EggEnabled = Value
+        if AutoBuy1EggEnabled then
+            while AutoBuy1EggEnabled do
+                local args = {
+                    [1] = selectedEggNumber,
+                }
+
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local Events = ReplicatedStorage:FindFirstChild("Events")
+                local OpenEgg = Events and Events:FindFirstChild("PlayerPressedKeyOnEgg")
+
+                if OpenEgg then
+                    OpenEgg:FireServer(unpack(args))
+                else
+                    warn("OpenEgg event not found in ReplicatedStorage/Events.")
+                end
+
+                wait(1)
+            end
+        end
+    end,
+})
+
+
+local UserTab = Window:CreateTab("👽 User", nil)
+local MainSection = UserTab:CreateSection("User Settings")
+
+local NoClipActivated = false
+local Noclip = nil
+local Clip = nil
+
+function noclip()
+    Clip = false
+    local function Nocl()
+        if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if v:IsA('BasePart') and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end
+        wait(0.21)
+    end
+    Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+end
+
+function clip()
+    if Noclip then
+        Noclip:Disconnect()
+    end
+    Clip = true
+end
+
+local Toggle = UserTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = NoClipActivated,
+    Callback = function(Value)
+        NoClipActivated = Value
+        if NoClipActivated then
+            noclip()
+        else
+            clip()
+        end
+    end,
+})
+
+
+local Button = UserTab:CreateButton({
+   Name = "Infinite Jump Toggle",
+   Callback = function()
+_G.infinjump = not _G.infinjump
+
+if _G.infinJumpStarted == nil then
+	_G.infinJumpStarted = true
+	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
+	local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "WalkSpeed Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderws",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "JumpPower Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderjp",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
+   end,
+})
+
+
+local MainSection = UserTab:CreateSection("User Extra's")
+local BtoolsActivate = true
+local Button = UserTab:CreateButton({
+    Name = "B-Tools",
+    Callback = function()
+        if BtoolsActivate then
+backpack = game:GetService("Players").LocalPlayer.Backpack
+hammer = Instance.new("HopperBin")
+hammer.Name = "Hammer"
+hammer.BinType = 4
+hammer.Parent = backpack
+
+cloneTool = Instance.new("HopperBin")
+cloneTool.Name = "Clone"
+cloneTool.BinType = 3
+cloneTool.Parent = backpack
+
+grabTool = Instance.new("HopperBin")
+grabTool.Name = "Grab"
+grabTool.BinType = 2
+grabTool.Parent = backpack
+		end
+    end,
+})
+
+local AntiAFKActivate = true
+local Button = UserTab:CreateButton({
+    Name = "Anti-Afk",
+    Callback = function()
+        if AntiAFKActivate then
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+		end
+    end,
+})
