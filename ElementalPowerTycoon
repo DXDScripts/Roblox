@@ -1,0 +1,428 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "⚔ Elemental Power Tycoon ⚔ | 📜 DXDScripts 📜",
+   LoadingTitle = "Elemental Power Tycoon",
+   LoadingSubtitle = "Script created by DXDScripts",
+   ConfigurationSaving = {
+      Enabled = false,
+   },
+   Discord = {
+      Enabled = true,
+      Invite = "us2eVmuTCq",
+      RememberJoins = true
+   },
+   KeySystem = false,
+})
+
+Rayfield:Notify({
+   Title = "Elemental Power Tycoon",
+   Content = "Created by DXDScripts",
+   Duration = 5,
+   Image = 13047715178,
+   Actions = {
+      Ignore = {
+         Name = "Okay!",
+         Callback = function()
+         print("The user tapped Okay!")
+      end
+   },
+},
+})
+
+local MainTab = Window:CreateTab("🏠 Home", nil)
+local MainSection = MainTab:CreateSection("Auto Farm")
+
+local AutoBuyButtons = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Train",
+    CurrentValue = AutoBuyButtons,
+    Callback = function(Value)
+        AutoBuyButtons = Value
+        if AutoBuyButtons then
+            while AutoBuyButtons do
+                local localPlayer = game.Players.LocalPlayer
+                local playerName = localPlayer.Name
+                local playerFolder = workspace.Tycoons:FindFirstChild(playerName)
+                local buttonsFolder = playerFolder:FindFirstChild("Buttons")
+                
+                if buttonsFolder then
+                    print("Found Buttons folder for player:", playerName)
+                    local buttonModelFolder = buttonsFolder:FindFirstChild("Button_Model")
+                    if buttonModelFolder then
+                        print("Found Button_Model folder for player:", playerName)
+                        wait(0.1)
+                        for _, buttonModel in ipairs(buttonModelFolder:GetChildren()) do
+                            local button = buttonModelFolder:FindFirstChild("Button")
+                            if button then
+                                local buttonCFrame = button.CFrame
+                                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(buttonCFrame)
+                                print("Teleported to button:", button.Name)
+                                wait(1) -- Adjust the wait time as needed
+                            else
+                                print("Button not found in model:", buttonModel.Name)
+                            end
+                        end
+                    else
+                        print("Button_Model folder not found for player:", playerName)
+                    end
+                else
+                    print("Buttons folder not found for player:", playerName)
+                end
+            end
+        end
+    end,
+})
+
+
+
+
+
+local AutoCollectTeleport = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Collect",
+   CurrentValue = AutoCollectTeleport,
+   Callback = function(Value)
+   AutoCollectTeleport = Value
+		if AutoCollectTeleport then
+			while AutoCollectTeleport do
+			    local localPlayer = game.Players.LocalPlayer
+                local playerName = localPlayer.Name
+                local playerFolder = workspace.Tycoons:FindFirstChild(playerName)
+                local auxiliaryFolder = playerFolder:FindFirstChild("Auxiliary")
+				local collectorModel = auxiliaryFolder:FindFirstChild("Collector")
+				local currentLocationFolder = workspace.Characters.Players:FindFirstChild(playerName)
+				local playerCurrentLocation = currentLocationFolder.HumanoidRootPart.CFrame
+				
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = collectorModel.Collect.CFrame
+				wait(0.5)
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = playerCurrentLocation
+				wait(5)
+			end
+		end
+   end,
+})
+
+local MainSection = MainTab:CreateSection("Auto Farm (You will need to press 'e' still)")
+
+local AutoChestTeleport = false
+local originalCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Chest",
+    CurrentValue = AutoChestTeleport,
+    Callback = function(Value)
+        AutoChestTeleport = Value
+        if AutoChestTeleport then
+            local chestsFolder = game:GetService("Workspace").Treasure.Chests
+
+            if chestsFolder then
+                local chests = chestsFolder:GetChildren()
+                local currentIndex = 1
+
+                while AutoChestTeleport and currentIndex <= #chests do
+                    local chest = chests[currentIndex]
+                    if chest:IsA("Part") then
+                        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(chest.CFrame)
+                        wait(1) -- Adjust the wait time as needed
+
+                        currentIndex = currentIndex + 1
+                    end
+                end
+
+                -- Teleport the player back to the original location after visiting all chests
+                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalCFrame)
+            end
+        end
+    end,
+})
+
+local AutoCrateTeleport = false
+local originalCFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Crates",
+    CurrentValue = AutoCrateTeleport,
+    Callback = function(Value)
+        AutoCrateTeleport = Value
+        if AutoCrateTeleport then
+            local crateLocation = game:GetService("Workspace").Crate
+            if crateLocation then
+                if crateLocation:IsA("MeshPart") then
+                    game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(crateLocation.CFrame)
+                    wait(1) -- Adjust the wait time as needed
+                end
+
+                -- Teleport the player back to the original location after visiting all crates
+                game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(originalCFrame)
+            end
+        end
+    end,
+})
+
+
+
+local MainSection = MainTab:CreateSection("Removal Options")
+
+local Button = MainTab:CreateButton({
+    Name = "Remove Paid Buttons",
+    Callback = function()
+            local localPlayer = game.Players.LocalPlayer
+            local playerName = localPlayer.Name
+            local playerFolder = workspace.Tycoons:FindFirstChild(playerName)
+            if playerFolder then
+                local auxiliaryFolder = playerFolder:FindFirstChild("Auxiliary")
+                if auxiliaryFolder then
+                    local itemsToDelete = {
+                        "2X",
+                        "Invite",
+                        "Infinity",
+                        "Health",
+                        "Speed",
+                        "Size",
+                        "Meteor",
+                        "Crate",
+                        "AllPowers",
+                    }
+                    for _, itemName in pairs(itemsToDelete) do
+                        local item = auxiliaryFolder:FindFirstChild(itemName)
+                        if item then
+                            item:Destroy()
+                        else
+                            warn("Item not found:", itemName)
+                        end
+                    end
+                else
+                    warn("Auxiliary folder not found for player:", playerName)
+                end
+            else
+                warn("Player folder not found for player:", playerName)
+            end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "Remove Laser Doors",
+    Callback = function()
+local function findAndDeleteLasersModels(folder)
+    for _, child in pairs(folder:GetDescendants()) do
+        if child:IsA("Model") and child.Name == "Lasers" then
+            child:Destroy()
+        end
+
+        if child:IsA("Folder") then
+            findAndDeleteLasersModels(child)
+        end
+    end
+end
+
+local tycoonsWorkspace = game:GetService("Workspace").Tycoons
+
+if tycoonsWorkspace then
+    findAndDeleteLasersModels(tycoonsWorkspace)
+end
+    end,
+})
+
+local TeleportTab = Window:CreateTab("💻 Teleport", nil)
+
+local MainSection = TeleportTab:CreateSection("Worlds")
+
+local function FetchItemNames()
+    local localPlayer = game.Players.LocalPlayer
+    local playerName = localPlayer.Name
+    local playerFolder = workspace.Tycoons:FindFirstChild(playerName)
+    local itemNames = {}
+    
+    for _, item in pairs(workspace.Tycoons:GetChildren()) do
+        table.insert(itemNames, item.Name)
+    end
+    
+    return itemNames
+end
+
+local selectedOption = {FetchItemNames()[1]}
+
+local Dropdown = TeleportTab:CreateDropdown({
+    Name = "Teleport to Tycoon",
+    Options = FetchItemNames(),
+    CurrentOption = selectedOption,
+    MultipleOptions = false,
+    Callback = function(Option)
+        selectedOption = Option
+        local selectedOptionName = selectedOption[1]
+        local localPlayer = game.Players.LocalPlayer
+        local playerFolder = workspace.Tycoons:FindFirstChild(localPlayer.Name)
+        local selectedOptionFolder = workspace.Tycoons:FindFirstChild(selectedOptionName)
+        
+            local auxiliaryFolder = selectedOptionFolder:FindFirstChild("Auxiliary") 
+            local spawnFolder = auxiliaryFolder and auxiliaryFolder:FindFirstChild("Spawn")
+            
+                local colorPart0 = spawnFolder:FindFirstChild("ColorPart0")
+                
+                    local cframe = colorPart0.CFrame
+                    local humanoidRootPart = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    
+                        humanoidRootPart.CFrame = cframe
+    end,
+})
+
+local itemsTab = Window:CreateTab("🥚 Items", nil)
+local MainSection = itemsTab:CreateSection("Equip Items")
+
+local Button = itemsTab:CreateButton({
+    Name = "Draedon's Tech [3 Rebirths]",
+    Callback = function()
+        local args = {
+    [1] = "Draedon's Tech"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EquipRebirthMagic"):FireServer(unpack(args))
+
+    end,
+})
+
+local Button = itemsTab:CreateButton({
+    Name = "Dark Flames [1 Rebirth]",
+    Callback = function()
+        local args = {
+    [1] = "Dark Flames"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("EquipRebirthMagic"):FireServer(unpack(args))
+
+    end,
+})
+
+
+local UserTab = Window:CreateTab("👽 User", nil)
+local MainSection = UserTab:CreateSection("User Settings")
+
+local NoClipActivated = false
+local Noclip = nil
+local Clip = nil
+
+function noclip()
+    Clip = false
+    local function Nocl()
+        if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if v:IsA('BasePart') and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end
+        wait(0.21)
+    end
+    Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+end
+
+function clip()
+    if Noclip then
+        Noclip:Disconnect()
+    end
+    Clip = true
+end
+
+local Toggle = UserTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = NoClipActivated,
+    Callback = function(Value)
+        NoClipActivated = Value
+        if NoClipActivated then
+            noclip()
+        else
+            clip()
+        end
+    end,
+})
+
+
+local Button = UserTab:CreateButton({
+   Name = "Infinite Jump Toggle",
+   Callback = function()
+_G.infinjump = not _G.infinjump
+
+if _G.infinJumpStarted == nil then
+	_G.infinJumpStarted = true
+	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
+	local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "WalkSpeed Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderws", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "JumpPower Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderjp", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
+   end,
+})
+
+
+local MainSection = UserTab:CreateSection("User Extra's")
+local BtoolsActivate = true
+local Button = UserTab:CreateButton({
+    Name = "B-Tools",
+    Callback = function()
+        if BtoolsActivate then
+backpack = game:GetService("Players").LocalPlayer.Backpack
+hammer = Instance.new("HopperBin")
+hammer.Name = "Hammer"
+hammer.BinType = 4
+hammer.Parent = backpack
+
+cloneTool = Instance.new("HopperBin")
+cloneTool.Name = "Clone"
+cloneTool.BinType = 3
+cloneTool.Parent = backpack
+
+grabTool = Instance.new("HopperBin")
+grabTool.Name = "Grab"
+grabTool.BinType = 2
+grabTool.Parent = backpack
+		end
+    end,
+})
+
+local AntiAFKActivate = true
+local Button = UserTab:CreateButton({
+    Name = "Anti-Afk",
+    Callback = function()
+        if AntiAFKActivate then
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+		end
+    end,
+})
