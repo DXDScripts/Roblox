@@ -2,12 +2,10 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
    Name = "🚴 Obby But You're on a Bike 🚴 | 📜 DXDScripts 📜",
-   LoadingTitle = "Obby But You're on a Bike v1.2",
+   LoadingTitle = "Obby But You're on a Bike v1.2.1",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil,
-      FileName = "Obby But You're on a Bike"
    },
    Discord = {
       Enabled = true,
@@ -18,7 +16,7 @@ local Window = Rayfield:CreateWindow({
 })
 
 Rayfield:Notify({
-   Title = "Obby But You're on a Bike",
+   Title = "Obby But You're on a Bike v1.2.1",
    Content = "Created by DXDScripts",
    Duration = 5,
    Image = 13047715178,
@@ -162,6 +160,7 @@ local Toggle = MainTab:CreateToggle({
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Spin Wheel Enabled"; Duration=5;})
 			while AutoSpinWheelEnabled do
 			game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SpinWheel"):FireServer()
+			wait(1)
 			end
 		end
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Spin Wheel Disabled"; Duration=5;})
@@ -195,6 +194,45 @@ end
    end,
 })
 
+local AutoClaimSeasonPassEnabled = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Collect Season Pass Rewards",
+   CurrentValue = AutoClaimSeasonPassEnabled,
+   Callback = function(Value)
+   AutoClaimSeasonPassEnabled = Value
+		if AutoClaimSeasonPassEnabled then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Collecting Season Pass Rewards"; Duration=5;})
+			while AutoClaimSeasonPassEnabled do
+local args = {
+    [1] = "ClaimAll"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("SeasonPass"):FireServer(unpack(args))
+wait(0.1)
+
+			end
+		end
+   end,
+})
+
+local AutoJumpEnabled = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Jump [For Season Pass]",
+   CurrentValue = AutoJumpEnabled,
+   Callback = function(Value)
+   AutoJumpEnabled = Value
+		if AutoJumpEnabled then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Jump Enabled"; Duration=5;})
+			while AutoJumpEnabledd do
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlayerJumped"):FireServer()
+
+wait(0.1)
+
+			end
+		end
+   end,
+})
+
 local MainSection = MainTab:CreateSection("Reset Options")
 local Button = MainTab:CreateButton({
 Name = "Reset Stage and Timer",
@@ -216,11 +254,9 @@ local MainSection = CheckPointTab:CreateSection("CheckPoint Options")
 local Button = CheckPointTab:CreateButton({
 Name = "Skip Current Stage",
     Callback = function()
-				-- Get player and stage value
 local player = game.Players.LocalPlayer
 local stage = player.leaderstats and player.leaderstats.Stage
 
--- Function to teleport to the next checkpoint HitBox
 local function teleportToNextCheckpoint()
     if stage and stage.Value then
         local checkpointNumber = tonumber(stage.Value) + 1
@@ -386,7 +422,8 @@ local function deleteFallingPartHitbox(part)
 end
 
 local function deleteHitboxesInFallingParts()
-    local fallingParts = workspace.WorldMap:FindFirstChild("FallingParts")
+	local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+    local fallingParts = mapInteractables:FindFirstChild("FallingParts")
     if fallingParts then
         for _, part in pairs(fallingParts:GetChildren()) do
             deleteFallingPartHitbox(part)
@@ -413,14 +450,15 @@ local MainSection = RemoveTab:CreateSection("Remove Options")
 
 
 local RemoveAll = true
-local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "SpinningHammers", "Ads", "ImmersiveAds", "Knives", "Boxing Gloves", "Bouncers", "SpearTraps"}
+local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "SpinningHammers", "Ads", "ImmersiveAds", "Knives", "BoxingGloves", "Bouncers", "SpearTraps", "MovingBouncers", "SpinningBoucners", "KillSwing"}
 local Button = RemoveTab:CreateButton({
     Name = "Remove All",
     Callback = function()
 	if RemoveAll then
 	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing All Objects"; Duration=5;})
         for _, folderName in ipairs(FoldersToRemoveAll) do
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild(folderName)
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild(folderName)
             if folderToClear then
                 for _, child in pairs(folderToClear:GetChildren()) do
 						child:Destroy()
@@ -434,79 +472,94 @@ local Button = RemoveTab:CreateButton({
     end,
 })
 
-local RemoveKillBricks = true
 local Button = RemoveTab:CreateButton({
     Name = "Remove KillBricks",
     Callback = function()
-        if RemoveKillBricks then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing KillBricks"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("KillBricks")
-				if folderToClear then
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("KillBricks")
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
-				end
-					else
-					warn("Folder not found")
 			end
 			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="KillBricks Removed"; Duration=5;})
-		end
     end,
 })
 
-local RemoveKnives = true
+local Button = RemoveTab:CreateButton({
+    Name = "Remove KillSwings",
+    Callback = function()
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing KillSwings"; Duration=5;})
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("KillSwings")
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+			end
+			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="KillSwings Removed"; Duration=5;})
+    end,
+})
+
 local Button = RemoveTab:CreateButton({
     Name = "Remove Knives",
     Callback = function()
-        if RemoveKnives then
 				game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Knives"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("Knives")
-				if folderToClear then
+				local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("Knives")
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
-				end
-					else
-					warn("Folder not found")
 			end
 					game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Knives Removed"; Duration=5;})
-		end
     end,
 })
 
-local RemoveSpears = true
 local Button = RemoveTab:CreateButton({
     Name = "Remove Spear Traps",
     Callback = function()
-        if RemoveSpears then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Spear Traps"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SpearTraps")
-				if folderToClear then
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("SpearTraps")
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
-				end
-					else
-					warn("Folder not found")
 			end
 			game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removed Spear Traps"; Duration=5;})
-		end
     end,
 })
 
-local RemoveBouncers = true
 local Button = RemoveTab:CreateButton({
     Name = "Remove Bouncers",
     Callback = function()
-        if RemoveBouncers then
 				game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Bouncers"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("Bouncers")
-				if folderToClear then
+				local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("Bouncers")
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
 				end
-					else
-					warn("Folder not found")
-			end
 					game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Bouncers Removed"; Duration=5;})
-		end
+    end,
+})
+
+local Button = RemoveTab:CreateButton({
+    Name = "Remove Moving Bouncers",
+    Callback = function()
+				game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Moving Bouncers"; Duration=5;})
+				local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("MovingBouncers")
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+				end
+					game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Moving Bouncers Removed"; Duration=5;})
+    end,
+})
+
+local Button = RemoveTab:CreateButton({
+    Name = "Remove Spinning Bouncers",
+    Callback = function()
+				game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Spinning Bouncers"; Duration=5;})
+				local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("SpinningBouncers")
+				for _, child in pairs(folderToClear:GetChildren()) do
+				child:Destroy()
+			end
+					game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Spinning Bouncers Removed"; Duration=5;})
     end,
 })
 
@@ -516,7 +569,8 @@ local Button = RemoveTab:CreateButton({
     Callback = function()
         if RemoveSwingBalls then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing SwingBalls"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SwingingBalls")
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("SwingingBalls")
 				if folderToClear then
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
@@ -535,7 +589,8 @@ local Button = RemoveTab:CreateButton({
     Callback = function()
         if RemoveBoxingGloves then
 				game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Boxing Gloves"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("BoxingGloves")
+				local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("BoxingGloves")
 				if folderToClear then
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
@@ -554,7 +609,8 @@ local Button = RemoveTab:CreateButton({
     Callback = function()
         if RemoveSpinningBars then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Spinning Bars"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SpinningBars")
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("SpinningBars")
 				if folderToClear then
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
@@ -573,7 +629,8 @@ local Button = RemoveTab:CreateButton({
     Callback = function()
         if RemoveSpinningHammers then
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Spinning Hammers"; Duration=5;})
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild("SpinningHammers")
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild("SpinningHammers")
 				if folderToClear then
 				for _, child in pairs(folderToClear:GetChildren()) do
 				child:Destroy()
@@ -592,7 +649,8 @@ local Button = RemoveTab:CreateButton({
     Callback = function()
 		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Removing Ads"; Duration=5;})
         for _, folderName in ipairs(FoldersToRemoveAds) do
-            local folderToClear = game:GetService("Workspace").WorldMap:FindFirstChild(folderName)
+		local mapInteractables = workspace.WorldMap:FindFirstChild("MapInteractables")
+            local folderToClear = mapInteractables:FindFirstChild(folderName)
             if folderToClear then
                 for _, child in pairs(folderToClear:GetChildren()) do
 						child:Destroy()
@@ -656,6 +714,13 @@ local Button = TeleportTab:CreateButton({
     end,
 })
 
+local Button = TeleportTab:CreateButton({
+    Name = "WORLD 7",
+    Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 7"; Duration=5;})
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World7.Teleport.CFrame
+    end,
+})
 
 
 local UserTab = Window:CreateTab("👽 User", nil)
