@@ -1,8 +1,8 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "🏃 Impossible Glass Bridge Obby 🏃 | 📜 DXDScripts 📜",
-   LoadingTitle = "Impossible Glass Bridge Obby",
+   Name = "🏃 Impossible Glass Bridge Obby v1.0.1🏃 | 📜 DXDScripts 📜",
+   LoadingTitle = "Impossible Glass Bridge Obby v1.0.1",
    LoadingSubtitle = "Script created by DXDScripts",
    ConfigurationSaving = {
       Enabled = false,
@@ -29,7 +29,14 @@ Rayfield:Notify({
    },
 },
 })
+local Players = game:GetService("Players")
+local LocalPlayer
 
+repeat
+    LocalPlayer = Players.LocalPlayer
+    wait()
+until LocalPlayer
+print("LocalPlayer is ready")
 local MainTab = Window:CreateTab("🏠 Home", nil)
 
 local MainSection = MainTab:CreateSection("Auto Farm")
@@ -89,6 +96,8 @@ local Toggle = MainTab:CreateButton({
    end,
 })
 
+local MainSection = MainTab:CreateSection("Extra's")
+
 local Button = MainTab:CreateButton({
     Name = "Spin Wheel",
     Callback = function()
@@ -96,21 +105,39 @@ local Button = MainTab:CreateButton({
     end,
 })
 
+local Button = MainTab:CreateButton({
+    Name = "Teleport to VIP",
+    Callback = function()
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["Glass Bridge"].Start.Sus.CFrame
+    end,
+})
 
-local RemovePaidItems = true
+
 local Button = MainTab:CreateButton({
     Name = "Remove Paid Items",
     Callback = function()
-        if RemovePaidItems then
-            local folderToClear = game:GetService("Workspace"):FindFirstChild("Pads")
-				if folderToClear then
-				for _, child in pairs(folderToClear:GetChildren()) do
-				child:Destroy()
-				end
-					else
-					warn("Folder not found")
-			end
-		end
+        local workspace = game:GetService("Workspace")
+
+        local function removeIfFound(objectName)
+            local object = workspace:FindFirstChild(objectName)
+            if object then
+                object:Remove()
+            else
+                warn("Object '" .. objectName .. "' not found in Workspace.")
+            end
+        end
+
+        removeIfFound("Become Squid Game Guard")
+        removeIfFound("Become Squid Front Man")
+
+        local folderToClear = workspace:FindFirstChild("Pads")
+        if folderToClear then
+            for _, child in pairs(folderToClear:GetChildren()) do
+                child:Destroy()
+            end
+        else
+            warn("Folder 'Pads' not found")
+        end
     end,
 })
 
@@ -131,7 +158,7 @@ function noclip()
                 end
             end
         end
-        wait(0.21)
+        wait(0.1)
     end
     Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
 end
@@ -164,7 +191,6 @@ _G.infinjump = not _G.infinjump
 
 if _G.infinJumpStarted == nil then
 	_G.infinJumpStarted = true
-	game.StarterGui:SetCore("SendNotification", {Title="Youtube Hub"; Text="Infinite Jump Activated!"; Duration=5;})
 	local plr = game:GetService('Players').LocalPlayer
 	local m = plr:GetMouse()
 	m.KeyDown:connect(function(k)
@@ -245,5 +271,3 @@ end)
 		end
     end,
 })
-local CreditTab = Window:CreateTab("📃 Credit", nil)
-local CreditParagraph = CreditTab:CreateParagraph({Title = "Script: DXDScripts", Content = "GUI: Rayfields"})
