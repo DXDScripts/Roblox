@@ -1,0 +1,391 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "💰 Heist Tycoon 💰 | 📜 DXDScripts 📜",
+   LoadingTitle = "Heist Tycoon",
+   LoadingSubtitle = "Script created by DXDScripts",
+   ConfigurationSaving = {
+      Enabled = false,
+   },
+   Discord = {
+      Enabled = true,
+      Invite = "us2eVmuTCq",
+      RememberJoins = true
+   },
+   KeySystem = false,
+})
+
+Rayfield:Notify({
+   Title = "Heist Tycoon",
+   Content = "Created by DXDScripts",
+   Duration = 5,
+   Image = 13047715178,
+   Actions = {
+      Ignore = {
+         Name = "Okay!",
+         Callback = function()
+         print("The user tapped Okay!")
+      end
+   },
+},
+})
+
+function AreCFrameEqual(cframe1, cframe2, tolerance)
+    tolerance = tolerance or 0.01
+    return (cframe1.Position - cframe2.Position).Magnitude < tolerance
+end
+
+function FindMatchingTycoonIndex()
+    local args = {
+        [1] = game:GetService("Players").LocalPlayer
+    }
+
+    game:GetService("ReplicatedStorage"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("TycoonService"):WaitForChild("RF"):WaitForChild("Teleport"):InvokeServer(unpack(args))
+
+    local localPlayer = game:GetService("Players").LocalPlayer
+    local localPlayerCFrame = localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart").CFrame
+
+    local tycoonsFolder = game:GetService("Workspace").Tycoons
+    local matchingTycoonIndex = nil
+
+    for index, tycoon in ipairs(tycoonsFolder:GetChildren()) do
+        local spawn = tycoon:FindFirstChild("Spawn")
+        local spawnCFrame = spawn.CFrame
+        if AreCFrameEqual(localPlayerCFrame, spawnCFrame) then
+            matchingTycoonIndex = index
+            break
+        end
+    end
+
+    return matchingTycoonIndex
+end
+
+
+function PayIncome()
+    local args = {
+        [1] = game:GetService("Players").LocalPlayer
+    }
+
+    local RFService = game:GetService("ReplicatedStorage"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("TycoonService"):WaitForChild("RF")
+    local PayIncomeRemote = RFService:WaitForChild("PayIncome")
+    PayIncomeRemote:InvokeServer(unpack(args))
+    wait(0.000001)
+end
+
+function DeleteObjects()
+    local objectsToDelete = {
+        "SWAT",
+        "RPG",
+        "Iron Man",
+        "Minigunner",
+        "Sniper",
+        "GamepassDoubleMoney",
+        "GamepassSprint",
+        "Drone Bomber",
+        "Missile Launcher",
+        "Racecar"
+    }
+
+    local tycoons = game:GetService("Workspace").Tycoons
+
+    for _, tycoon in pairs(tycoons:GetChildren()) do
+        local buttons = tycoon:FindFirstChild("Buttons")
+
+        if buttons then
+            for _, objectName in ipairs(objectsToDelete) do
+                local objectToDelete = buttons:FindFirstChild(objectName)
+
+                if objectToDelete then
+                    objectToDelete:Destroy()
+                end
+            end
+        end
+    end
+end
+
+local MainTab = Window:CreateTab("🏠 Home", nil)
+local MainSection = MainTab:CreateSection("Auto Income")
+
+
+local AutoIncomeEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Income",
+    CurrentValue = AutoIncomeEnabled,
+    Callback = function(Value)
+        AutoIncomeEnabled = Value
+        if AutoIncomeEnabled then
+            while AutoIncomeEnabled do
+			PayIncome()
+			end
+        end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "Auto Income Speed up [MAY CAUSE LAG]",
+    Callback = function()
+		while true do
+			PayIncome()
+		end
+    end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "500m Cash [BECAUSE WHY NOT]",
+    Callback = function()
+		local args = {
+    [1] = 500000000
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("RaidService"):WaitForChild("RF"):WaitForChild("GiveReward"):InvokeServer(unpack(args))
+    end,
+})
+
+local MainSection = MainTab:CreateSection("Auto Tycoon")
+local AutoBuyEnabled = false
+local RetryDelay = 2
+
+local skipItems = {
+    "Guard1 1",
+    "Guard2 1",
+    "Guard3 1",
+    "Guard4 1",
+    "Guard5 1",
+    "Police1 1",
+    "Police2 1",
+    "Police3 1",
+    "Police4 1",
+    "Army1 1",
+    "Army2 1",
+    "Army3 1",
+    "Army4 1",
+    "DefenseCar1 1",
+    "FBI",
+    "FBI2",
+    "SpecialOps",
+}
+
+local function AutoBuy()
+    local matchingTycoonIndex = FindMatchingTycoonIndex()
+
+    if matchingTycoonIndex then
+        local tycoonsFolder = game:GetService("Workspace").Tycoons
+        local matchingTycoon = tycoonsFolder:GetChildren()[matchingTycoonIndex]
+        local buttonsFolder = matchingTycoon:FindFirstChild("Buttons")
+
+        while AutoBuyEnabled do
+            if buttonsFolder then
+                local itemsToBuy = {}
+
+                for _, item in pairs(buttonsFolder:GetChildren()) do
+                    local itemName = item.Name
+                    if not table.find(skipItems, itemName) then
+                        table.insert(itemsToBuy, itemName)
+                    end
+                end
+
+                if #itemsToBuy > 0 then
+                    for _, itemName in pairs(itemsToBuy) do
+                        local args = {
+                            [1] = itemName,
+                            [2] = 1
+                        }
+                        print("Buying item:", args[1])
+                        local success, errorMessage = pcall(function()
+                            local RFService = game:GetService("ReplicatedStorage"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("TycoonService"):WaitForChild("RF")
+                            local BuyObjectRemote = RFService:WaitForChild("BuyObject")
+                            BuyObjectRemote:InvokeServer(unpack(args))
+                        end)
+                        wait(0.1)
+                    end
+                else
+                    AutoBuyEnabled = false 
+                end
+            else
+                wait(RetryDelay)
+            end
+        end
+    else
+        print("No matching tycoon found")
+    end
+end
+
+
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Buy",
+    CurrentValue = AutoBuyEnabled,
+    Callback = function(Value)
+        AutoBuyEnabled = Value
+        if AutoBuyEnabled then
+            AutoBuy()
+        end
+    end,
+})
+
+local AutoRebirthEnabled = false
+local Toggle = MainTab:CreateToggle({
+    Name = "Auto Rebirth",
+    CurrentValue = AutoRebirthEnabled,
+    Callback = function(Value)
+        AutoRebirthEnabled = Value
+        if AutoRebirthEnabled then
+            while AutoRebirthEnabled do
+                game:GetService("ReplicatedStorage"):WaitForChild("Knit"):WaitForChild("Services"):WaitForChild("TycoonService"):WaitForChild("RF"):WaitForChild("Rebirth"):InvokeServer()
+				wait(2)
+            end
+        end
+    end,
+})
+
+local MainSection = MainTab:CreateSection("Tycoon Extra's")
+
+local Button = MainTab:CreateButton({
+    Name = "Fix Tycoon Issues",
+    Callback = function()
+ local matchingTycoonIndex = FindMatchingTycoonIndex()
+    end,
+})
+
+local Button = MainTab:CreateButton({
+    Name = "Delete Paid Buttons",
+    Callback = function()
+        DeleteObjects()
+    end,
+})
+
+
+local UserTab = Window:CreateTab("👽 User", nil)
+local MainSection = UserTab:CreateSection("User Settings")
+
+local NoClipActivated = false
+local Noclip = nil
+local Clip = nil
+
+function noclip()
+    Clip = false
+    local function Nocl()
+        if Clip == false and game.Players.LocalPlayer.Character ~= nil then
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+                if v:IsA('BasePart') and v.CanCollide then
+                    v.CanCollide = false
+                end
+            end
+        end
+        wait(0.1)
+    end
+    Noclip = game:GetService('RunService').Stepped:Connect(Nocl)
+end
+
+function clip()
+    if Noclip then
+        Noclip:Disconnect()
+    end
+    Clip = true
+end
+
+local Toggle = UserTab:CreateToggle({
+    Name = "NoClip",
+    CurrentValue = NoClipActivated,
+    Callback = function(Value)
+        NoClipActivated = Value
+        if NoClipActivated then
+			game.StarterGui:SetCore("SendNotification", {Title="Pull a Sword - DXDScripts"; Text="No-Clip Activated"; Duration=5;})
+            noclip()
+        else
+			game.StarterGui:SetCore("SendNotification", {Title="Pull a Sword - DXDScripts"; Text="No-Clip Deactivated!"; Duration=5;})
+            clip()
+        end
+    end,
+})
+
+
+local Button = UserTab:CreateButton({
+   Name = "Infinite Jump Toggle",
+   Callback = function()
+_G.infinjump = not _G.infinjump
+
+if _G.infinJumpStarted == nil then
+	_G.infinJumpStarted = true
+	game.StarterGui:SetCore("SendNotification", {Title="Pull a Sword - DXDScripts"; Text="Infinite Jump Activated!"; Duration=5;})
+	local plr = game:GetService('Players').LocalPlayer
+	local m = plr:GetMouse()
+	m.KeyDown:connect(function(k)
+		if _G.infinjump then
+			if k:byte() == 32 then
+			humanoid = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+			humanoid:ChangeState('Jumping')
+			wait()
+			humanoid:ChangeState('Seated')
+			end
+		end
+	end)
+end
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "WalkSpeed Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderws",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = (Value)
+   end,
+})
+
+local Slider = UserTab:CreateSlider({
+   Name = "JumpPower Slider",
+   Range = {16, 350},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "sliderjp",
+   Callback = function(Value)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = (Value)
+   end,
+})
+
+
+local MainSection = UserTab:CreateSection("User Extra's")
+local BtoolsActivate = true
+local Button = UserTab:CreateButton({
+    Name = "B-Tools",
+    Callback = function()
+        if BtoolsActivate then
+		game.StarterGui:SetCore("SendNotification", {Title="Heist Tycoon - DXDScripts"; Text="B-Tools Given"; Duration=5;})
+backpack = game:GetService("Players").LocalPlayer.Backpack
+hammer = Instance.new("HopperBin")
+hammer.Name = "Hammer"
+hammer.BinType = 4
+hammer.Parent = backpack
+
+cloneTool = Instance.new("HopperBin")
+cloneTool.Name = "Clone"
+cloneTool.BinType = 3
+cloneTool.Parent = backpack
+
+grabTool = Instance.new("HopperBin")
+grabTool.Name = "Grab"
+grabTool.BinType = 2
+grabTool.Parent = backpack
+		end
+    end,
+})
+
+local AntiAFKActivate = true
+local Button = UserTab:CreateButton({
+    Name = "Anti-Afk",
+    Callback = function()
+        if AntiAFKActivate then
+		game.StarterGui:SetCore("SendNotification", {Title="Heist Tycoon - DXDScripts"; Text="Anti-AFK Activated"; Duration=5;})
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+   wait(1)
+   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+		end
+    end,
+})
