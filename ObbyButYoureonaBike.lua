@@ -149,6 +149,43 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Wo
    end,
 })
 
+local AutoFarmSpookyCoins = false
+local Toggle = MainTab:CreateToggle({
+   Name = "Auto Farm Spooky Coins [Every 10 seconds - Spooky World]",
+   CurrentValue = AutoFarmSpookyCoins,
+   Callback = function(Value)
+   AutoFarmSpookyCoins = Value
+		if AutoFarmSpookyCoins then
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Farm Spooky Coins Started"; Duration=5;})
+			while AutoFarmSpookyCoins do
+			local player = game.Players.LocalPlayer
+                local checkpointsFolder = game:GetService("Workspace").WorldMap.Checkpoints
+
+                for i = 1, 99 do
+                    local checkpointName = tostring(i)
+                    local checkpoint = checkpointsFolder:FindFirstChild(checkpointName)
+
+                    if checkpoint and checkpoint:IsA("Model") then
+                        local checkpointHitbox = checkpoint:FindFirstChild("Hitbox")
+
+                        if checkpointHitbox and checkpointHitbox:IsA("BasePart") then
+                            player.Character.HumanoidRootPart.CFrame = checkpointHitbox.CFrame
+
+                            wait(0.01)
+                        end
+                    else
+                        break
+                    end
+                end
+				wait(1)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.RestartPortal.Teleport.CFrame
+wait(10)
+				end
+				end
+		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Farm Spooky Coins Started Finished"; Duration=5;})
+   end,
+})
+
 local MainSection = MainTab:CreateSection("Auto Extra's")
 local AutoSpinWheelEnabled = false
 local Toggle = MainTab:CreateToggle({
@@ -222,12 +259,9 @@ local Toggle = MainTab:CreateToggle({
    Callback = function(Value)
    AutoJumpEnabled = Value
 		if AutoJumpEnabled then
-		game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Auto Jump Enabled"; Duration=5;})
 			while AutoJumpEnabledd do
 game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("PlayerJumped"):FireServer()
-
 wait(0.1)
-
 			end
 		end
    end,
@@ -450,7 +484,7 @@ local MainSection = RemoveTab:CreateSection("Remove Options")
 
 
 local RemoveAll = true
-local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "SwingingBalls", "SpinningBars", "SpinningHammers", "Ads", "ImmersiveAds", "Knives", "BoxingGloves", "Bouncers", "SpearTraps", "MovingBouncers", "SpinningBoucners", "KillSwing"}
+local FoldersToRemoveAll = {"SwingingBalls", "KillBricks", "KillSwings", "SwingingBalls", "SpinningBars", "SpinningHammers", "Ads", "ImmersiveAds", "Knives", "BoxingGloves", "Bouncers", "SpearTraps", "MovingBouncers", "SpinningBoucners", "KillSwing"}
 local Button = RemoveTab:CreateButton({
     Name = "Remove All",
     Callback = function()
@@ -669,7 +703,7 @@ local MainSection = TeleportTab:CreateSection("Worlds")
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 1",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporating  to WORLD 1"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporating to WORLD 1"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World1.Teleport.CFrame
     end,
 })
@@ -677,7 +711,7 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 2",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 2"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 2"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World2.Teleport.CFrame
     end,
 })
@@ -685,7 +719,7 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 3",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 3"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 3"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World3.Teleport.CFrame
     end,
 })
@@ -693,7 +727,7 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 4",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 4"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 4"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World4.Teleport.CFrame
     end,
 })
@@ -701,7 +735,7 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 5",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 5"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 5"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World5.Teleport.CFrame
     end,
 })
@@ -709,7 +743,7 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 6",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 6"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 6"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World6.Teleport.CFrame
     end,
 })
@@ -717,8 +751,16 @@ local Button = TeleportTab:CreateButton({
 local Button = TeleportTab:CreateButton({
     Name = "WORLD 7",
     Callback = function()
-	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting  to WORLD 7"; Duration=5;})
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to WORLD 7"; Duration=5;})
    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World7.Teleport.CFrame
+    end,
+})
+
+local Button = TeleportTab:CreateButton({
+    Name = "Spooky World",
+    Callback = function()
+	game.StarterGui:SetCore("SendNotification", {Title="DXDSCRIPTS"; Text="Teleporting to Spooky World"; Duration=5;})
+   game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").WorldMap.WorldPortals.World0.Teleport.CFrame
     end,
 })
 
